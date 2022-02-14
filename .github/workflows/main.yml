@@ -49,7 +49,7 @@ jobs:
       - run: |
           for changed_file in ${{ steps.get-new-files.outputs.added }}
           do
-            poetry run sigma-converter --backend splunk -n --config crowdstrike $GITHUB_WORKSPACE/${changed_file}
+            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file}
           done
       
       # - name: Commit files
