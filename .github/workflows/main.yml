@@ -49,26 +49,32 @@ jobs:
       - name: run tests
         run: |
           cd pysigma
-          for changed_file in ${{ steps.get-new-files.outputs.added }}
-          do
-            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../test
-          done
-          
-      - name: Commit files
-        id: commit
-        run: |
-          git config --local user.email "zainimran@outlook.com"
-          git config --local user.name "Zain Imran"
-          git add --all
-          if [-z "$(git status --porcelain)"]; then
-            echo "::set-output name=push::false"
-          else
-            git commit -m "Add changes" -a
-            echo "::set-output name=push::true"
-          fi
+          poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml > ../test
+          cd ..
+          ls -la
+          cat test 
+
+      # - run: |
+      #     for changed_file in ${{ steps.get-new-files.outputs.added }}
+      #     do
+      #       poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file}
+      #     done
+      
+      # - name: Commit files
+      #   id: commit
+      #   run: |
+      #     git config --local user.email "zainimran@outlook.com"
+      #     git config --local user.name "Zain Imran"
+      #     git add --all
+      #     if [-z "$(git status --porcelain)"]; then
+      #       echo "::set-output name=push::false"
+      #     else
+      #       git commit -m "Add changes" -a
+      #       echo "::set-output name=push::true"
+      #     fi
         
-      - name: Push changes
-        if: steps.commit.outputs.push == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Push changes
+      #   if: steps.commit.outputs.push == 'true'
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
