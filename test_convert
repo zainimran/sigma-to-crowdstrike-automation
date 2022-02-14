@@ -1,1 +1,0 @@
-(SourceImage="*\System32\cscript.exe" OR SourceImage="*\System32\wscript.exe" OR SourceImage="*\System32\mshta.exe" OR SourceImage="*\winword.exe" OR SourceImage="*\excel.exe") TargetImage="*\SysWOW64\*" StartModule!=*
