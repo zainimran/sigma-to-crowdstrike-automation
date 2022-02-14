@@ -28,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          repository: SigmaHQ/pySigma
+          repository: zainimran/pySigma
           path: './pysigma'
       
       - name: setup python 3.8
