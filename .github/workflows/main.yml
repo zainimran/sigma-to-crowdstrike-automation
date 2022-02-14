@@ -49,7 +49,7 @@ jobs:
       - name: run tests
         run: |
           cd pysigma
-          poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml > ../test
+          poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml > ../test_convert
           cd ..
           ls -la
           cat test 
@@ -68,6 +68,7 @@ jobs:
           git config --local user.name "Zain Imran"
           git add .
           git commit -m "Committing converted rule"
+          echo "::set-output name=push::true"
         
       - name: Push changes
         if: steps.commit.outputs.push == 'true'
