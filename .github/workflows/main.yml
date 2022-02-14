@@ -49,7 +49,6 @@ jobs:
       - name: run tests
         run: |
           cd pysigma
-          poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml > ../test_convert
           for changed_file in ${{ steps.get-new-files.outputs.added }}
           do
             poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../${changed_file}_cs_converted
