@@ -48,6 +48,7 @@ jobs:
         
       - name: run tests
         run: |
+          cd pysigma
           poetry run sigma-converter --backend splunk -n --config crowdstrike rules/sysmon_cactustorch.yml
 
       # - run: |
