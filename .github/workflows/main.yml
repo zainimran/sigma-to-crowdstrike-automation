@@ -43,11 +43,11 @@ jobs:
           cd $GITHUB_WORKSPACE/pysigma
           poetry install
 
-      # - id: get-new-files
-      #   uses: jitterbit/get-changed-files@v1
+      - id: get-new-files
+        uses: jitterbit/get-changed-files@v1
         
-      # - run: |
-      #     for changed_file in ${{ steps.get-new-files.outputs.added }}
-      #     do
-      #       poetry run sigma-converter --backend splunk -n --config crowdstrike ${changed_file} > temp
-      #     done
+      - run: |
+          for changed_file in ${{ steps.get-new-files.outputs.added }}
+          do
+            echo "Do something with this ${changed_file}."
+          done
