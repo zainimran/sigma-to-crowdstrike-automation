@@ -49,7 +49,7 @@ jobs:
       - name: run tests
         run: |
           cd pysigma
-          poetry run sigma-converter --backend splunk -n --config crowdstrike rules/sysmon_cactustorch.yml
+          poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml
 
       # - run: |
       #     for changed_file in ${{ steps.get-new-files.outputs.added }}
