@@ -51,7 +51,10 @@ jobs:
           cd pysigma
           for changed_file in ${{ steps.get-new-files.outputs.added }}
           do
-            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../${changed_file}_cs_converted
+            if echo ${changed_file} | grep -q "rules"
+            then
+              poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../${changed_file}_cs_converted
+            fi
           done
 
       - name: Commit files
@@ -60,7 +63,7 @@ jobs:
           git config --local user.email "zainimran@outlook.com"
           git config --local user.name "Zain Imran"
           git add .
-          if [-z "$(git status --porcelain)"]; then
+          if [ -z $(git status --porcelain) ]; then
             echo "::set-output name=push::false"
           else
             git commit -m "Committing converted rule"
