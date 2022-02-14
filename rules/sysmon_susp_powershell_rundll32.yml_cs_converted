@@ -1,0 +1,1 @@
+SourceImage="*\powershell.exe" TargetImage="*\rundll32.exe"
