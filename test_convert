@@ -1,0 +1,4 @@
+The currently activated Python version 3.7.12 is not supported by the project (^3.8).
+Trying to find and use a compatible version. 
+Using python3.8 (3.8.10)
+(SourceImage="*\System32\cscript.exe" OR SourceImage="*\System32\wscript.exe" OR SourceImage="*\System32\mshta.exe" OR SourceImage="*\winword.exe" OR SourceImage="*\excel.exe") TargetImage="*\SysWOW64\*" StartModule!=*
