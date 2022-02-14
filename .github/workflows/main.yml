@@ -46,11 +46,15 @@ jobs:
       - id: get-new-files
         uses: jitterbit/get-changed-files@v1
         
-      - run: |
-          for changed_file in ${{ steps.get-new-files.outputs.added }}
-          do
-            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file}
-          done
+      - name: run tests
+        run: |
+          poetry --help
+
+      # - run: |
+      #     for changed_file in ${{ steps.get-new-files.outputs.added }}
+      #     do
+      #       poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file}
+      #     done
       
       # - name: Commit files
       #   id: commit
