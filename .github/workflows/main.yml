@@ -51,7 +51,7 @@ jobs:
           cd pysigma
           for changed_file in ${{ steps.get-new-files.outputs.added }}
           do
-            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > test
+            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../test
           done
           
       - name: Commit files
