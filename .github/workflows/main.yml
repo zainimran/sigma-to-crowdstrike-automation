@@ -50,20 +50,14 @@ jobs:
         run: |
           cd pysigma
           poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml > ../test_convert
-          cd ..
-          ls -la
-          cat test_convert
+          for changed_file in ${{ steps.get-new-files.outputs.added }}
+          do
+            poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../${changed_file}_cs_converted
+          done
 
-      # - run: |
-      #     for changed_file in ${{ steps.get-new-files.outputs.added }}
-      #     do
-      #       poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file}
-      #     done
-      
       - name: Commit files
         id: commit
         run: |
-          pwd
           git config --local user.email "zainimran@outlook.com"
           git config --local user.name "Zain Imran"
           git add .
