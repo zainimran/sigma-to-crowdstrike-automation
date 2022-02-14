@@ -49,7 +49,7 @@ jobs:
       - name: run tests
         run: |
           pwd
-          poetry --help
+          ls -la
 
       # - run: |
       #     for changed_file in ${{ steps.get-new-files.outputs.added }}
