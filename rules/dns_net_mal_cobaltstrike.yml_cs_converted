@@ -1,1 +1,1 @@
-QueryName="aaa.stage.*" OR QueryName="post.1*" OR QueryName="*.stage.123456.*"
+DomainName="aaa.stage.*" OR DomainName="post.1*" OR DomainName="*.stage.123456.*"
