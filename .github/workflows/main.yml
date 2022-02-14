@@ -52,7 +52,7 @@ jobs:
           poetry run sigma-converter --backend splunk -n --config crowdstrike ../rules/sysmon_cactustorch.yml > ../test_convert
           cd ..
           ls -la
-          cat test 
+          cat test_convert
 
       # - run: |
       #     for changed_file in ${{ steps.get-new-files.outputs.added }}
