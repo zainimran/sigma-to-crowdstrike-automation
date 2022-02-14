@@ -49,5 +49,5 @@ jobs:
       - run: |
           for changed_file in ${{ steps.get-new-files.outputs.added }}
           do
-            echo "Do something with this ${changed_file}."
+            poetry run sigma-converter --backend splunk -n --config crowdstrike ${changed_file} > temp
           done
