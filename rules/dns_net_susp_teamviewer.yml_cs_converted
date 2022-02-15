@@ -1,0 +1,1 @@
+DomainName IN ("taf.teamviewer.com", "udp.ping.teamviewer.com") NOT Image="*TeamViewer*"
