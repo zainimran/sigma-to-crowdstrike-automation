@@ -52,12 +52,13 @@ jobs:
 
       - name: run conversion and push rule to CS
         run: |
-          echo ${auth_token}
+          auth_token = $(cat cs_auth_token.json | jq -r '.access_token')
+          echo "auth_token: $auth_token"
           for changed_file in ${{ steps.get-new-files.outputs.added_modified }}
           do
             if echo ${changed_file} | grep -q "rules"
             then
-              python script.py ${changed_file} $(jq '.access_token' cs_auth_token.json)
+              python script.py ${changed_file} ${auth_token}
             fi
           done
 
