@@ -25,7 +25,7 @@ if product == 'windows':
 
 field_values = []
 
-if 'filter' in detection:
+if ('filter' or 'browser_process') in detection:
     image_filter = ''
     if 'Image|contains' in detection['filter']:
         image_filter = ".*{detection}.*".format(
