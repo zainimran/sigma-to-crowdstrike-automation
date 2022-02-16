@@ -52,7 +52,7 @@ jobs:
 
       - name: run conversion and push rule to CS
         run: |
-          auth_token = $(cat cs_auth_token.json | jq -r '.access_token')
+          auth_token=$(cat cs_auth_token.json | jq -r '.access_token')
           echo "auth_token: $auth_token"
           for changed_file in ${{ steps.get-new-files.outputs.added_modified }}
           do
