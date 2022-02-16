@@ -25,11 +25,11 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v1
 
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          repository: zainimran/pySigma
-          path: './pysigma'
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: zainimran/pySigma
+      #     path: './pysigma'
       
       - name: setup python 3.8
         uses: actions/setup-python@v1
@@ -39,39 +39,43 @@ jobs:
       - name: install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install poetry
-          cd $GITHUB_WORKSPACE/pysigma
-          poetry install
-
+          pip install requests
+          sudo apt-get install jq
+          
       - id: get-new-files
         uses: jitterbit/get-changed-files@v1
-        
-      - name: run tests
+
+      - name: get CS auth token
+        run: |
+          curl -X POST "https://api.us-2.crowdstrike.com/oauth2/token" -H  "accept: application/json" -H  "Content-Type: application/x-www-form-urlencoded" -d "client_id=${{ secrets.CS_CLIENT_ID }}&client_secret=${{ secrets.CS_CLIENT_SECRET }}" > cs_auth_token.json
+          auth_token=$(jq '.access_token' cs_auth_token.json) 
+
+      - name: run conversion and push rule to CS
         run: |
           cd pysigma
           for changed_file in ${{ steps.get-new-files.outputs.added_modified }}
           do
             if echo ${changed_file} | grep -q "rules"
             then
-              poetry run sigma-converter --backend splunk -n --config crowdstrike ../${changed_file} > ../${changed_file}_cs_converted
+              python script.py ${changed_file} ${auth_token}
             fi
           done
 
-      - name: Commit files
-        id: commit
-        run: |
-          git config --local user.email "zainimran@outlook.com"
-          git config --local user.name "Zain Imran"
-          git add .
-          if [ -z $(git status --porcelain) ]; then
-            echo "::set-output name=push::false"
-          else
-            git commit -m "Committing converted rule"
-            echo "::set-output name=push::true"
-          fi
+      # - name: Commit files
+      #   id: commit
+      #   run: |
+      #     git config --local user.email "zainimran@outlook.com"
+      #     git config --local user.name "Zain Imran"
+      #     git add .
+      #     if [ -z $(git status --porcelain) ]; then
+      #       echo "::set-output name=push::false"
+      #     else
+      #       git commit -m "Committing converted rule"
+      #       echo "::set-output name=push::true"
+      #     fi
 
-      - name: Push changes
-        if: steps.commit.outputs.push == 'true'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Push changes
+      #   if: steps.commit.outputs.push == 'true'
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
