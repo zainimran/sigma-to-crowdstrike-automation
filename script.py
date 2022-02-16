@@ -4,7 +4,7 @@ import json
 import sys
 
 # parse a sigma rule in a yaml file and get its contents
-with open(sys.argv[1], 'r') as stream:
+with open('rules\dns\dns_net_susp_ipify.yml', 'r') as stream:
     try:
         data_loaded = yaml.safe_load(stream)
         name = data_loaded['title']
@@ -25,13 +25,12 @@ if product == 'windows':
 
 field_values = []
 
-# check for multple keys in an object 
-
-if 'filter' in detection or 'browser_process' in detection:
+search_ident = detection.get('filter') or detection.get('browser_process')
+if search_ident:
     image_filter = ''
-    if 'Image|contains' in detection['filter']:
+    if 'Image|contains' in detection[search_ident]:
         image_filter = ".*{detection}.*".format(
-            detection=detection['filter']['Image|contains'])
+            detection=detection[search_ident]['Image|contains'])
         field_values.append({
             "name": "ImageFilename",
             "label": "Image Filename",
@@ -42,9 +41,9 @@ if 'filter' in detection or 'browser_process' in detection:
             }
             ]
         })
-    elif 'Image|endswith' in detection['filter']:
+    elif 'Image|endswith' in detection[search_ident]:
         image_filter = ".*{detection}".format(
-            detection=detection['filter']['Image|endswith'].replace(
+            detection=detection[search_ident]['Image|endswith'].replace(
                 '\\', '', 1))
         field_values.append({
             "name": "ImageFilename",
@@ -93,7 +92,7 @@ payload = json.dumps({
     "ruletype_id": ruletype_id,
     "disposition_id": 10,
     "field_values": field_values
-})
+}, indent=4, sort_keys=True)
 
 headers = {
     'X-CS-USERNAME': 'zain.imran@ebryx.com',
