@@ -4,7 +4,7 @@ import json
 import sys
 
 # parse a sigma rule in a yaml file and get its contents
-with open('rules\dns\dns_net_susp_ipify.yml', 'r') as stream:
+with open(sys.argv[1], 'r') as stream:
     try:
         data_loaded = yaml.safe_load(stream)
         name = data_loaded['title']
