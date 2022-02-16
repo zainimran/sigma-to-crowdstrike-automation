@@ -25,7 +25,9 @@ if product == 'windows':
 
 field_values = []
 
-if ('filter' or 'browser_process') in detection:
+# check for multple keys in an object 
+
+if 'filter' in detection or 'browser_process' in detection:
     image_filter = ''
     if 'Image|contains' in detection['filter']:
         image_filter = ".*{detection}.*".format(
