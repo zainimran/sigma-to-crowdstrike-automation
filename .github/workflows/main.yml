@@ -53,6 +53,7 @@ jobs:
       - name: run conversion and push rule to CS
         run: |
           cd pysigma
+          echo ${auth_token}
           for changed_file in ${{ steps.get-new-files.outputs.added_modified }}
           do
             if echo ${changed_file} | grep -q "rules"
