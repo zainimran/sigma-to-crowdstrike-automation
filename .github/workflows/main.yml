@@ -24,12 +24,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v1
-
-      # - name: Checkout
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: zainimran/pySigma
-      #     path: './pysigma'
       
       - name: setup python 3.8
         uses: actions/setup-python@v1
@@ -53,7 +47,6 @@ jobs:
       - name: run conversion and push rule to CS
         run: |
           auth_token=$(cat cs_auth_token.json | jq -r '.access_token')
-          echo "auth_token: $auth_token"
           for changed_file in ${{ steps.get-new-files.outputs.added_modified }}
           do
             if echo ${changed_file} | grep -q "rules"
@@ -61,22 +54,3 @@ jobs:
               python script.py ${changed_file} ${auth_token}
             fi
           done
-
-      # - name: Commit files
-      #   id: commit
-      #   run: |
-      #     git config --local user.email "zainimran@outlook.com"
-      #     git config --local user.name "Zain Imran"
-      #     git add .
-      #     if [ -z $(git status --porcelain) ]; then
-      #       echo "::set-output name=push::false"
-      #     else
-      #       git commit -m "Committing converted rule"
-      #       echo "::set-output name=push::true"
-      #     fi
-
-      # - name: Push changes
-      #   if: steps.commit.outputs.push == 'true'
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}

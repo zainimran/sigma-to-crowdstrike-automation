@@ -40,6 +40,20 @@ if 'filter' in detection:
             }
             ]
         })
+    elif 'Image|endswith' in detection['filter']:
+        image_filter = ".*{detection}".format(
+            detection=detection['filter']['Image|endswith'].replace(
+                '\\', '', 1))
+        field_values.append({
+            "name": "ImageFilename",
+            "label": "Image Filename",
+            "type": "excludable",
+            "values": [{
+                "label": "exclude",
+                "value": image_filter
+            }
+            ]
+        })
 
 if 'dns_request' in detection:
     dns_values = []
@@ -53,13 +67,14 @@ if 'dns_request' in detection:
     elif 'QueryName|contains' in detection['dns_request']:
         dns_list = detection['dns_request']['QueryName|contains']
         for dns in dns_list:
-            dns = ".*{detection}.*".format(detection=detection['dns_request']['QueryName|contains'])
+            dns = ".*{detection}.*".format(
+                detection=detection['dns_request']['QueryName|contains'])
             dns_values.append({
                 "label": "include",
                 "value": dns
             })
     if len(dns_values) == 0:
-      dns_values = ".*"
+        dns_values = ".*"
     field_values.append({
         "name": "DomainName",
         "label": "Domain Name",
