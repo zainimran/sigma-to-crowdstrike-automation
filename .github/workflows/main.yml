@@ -49,7 +49,6 @@ jobs:
       - name: get CS auth token
         run: |
           curl -X POST "https://api.us-2.crowdstrike.com/oauth2/token" -H  "accept: application/json" -H  "Content-Type: application/x-www-form-urlencoded" -d "client_id=${{ secrets.CS_CLIENT_ID }}&client_secret=${{ secrets.CS_CLIENT_SECRET }}" > cs_auth_token.json
-          auth_token=$(jq '.access_token' cs_auth_token.json) 
 
       - name: run conversion and push rule to CS
         run: |
@@ -58,7 +57,7 @@ jobs:
           do
             if echo ${changed_file} | grep -q "rules"
             then
-              python script.py ${changed_file} ${auth_token}
+              python script.py ${changed_file} $(jq '.access_token' cs_auth_token.json)
             fi
           done
 
