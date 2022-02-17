@@ -41,10 +41,10 @@ jobs:
 
       - name: get CS auth tokens
         run: |
-          python get_tokens.py  
-          curl -X POST "https://api.us-2.crowdstrike.com/oauth2/token" -H  "accept: application/json" -H  "Content-Type: application/x-www-form-urlencoded" -d "client_id=${{ secrets.CS_CLIENT_ID }}&client_secret=${{ secrets.CS_CLIENT_SECRET }}" > ebryx_cs_auth_token.json
+          python get_tokens.py
         env:
-          SECRETS: ${{ secrets.CS_CLIENT_ID }} ${{ secrets.CS_CLIENT_SECRET }}
+          CS_CLIENT_ID: ${{ secrets.CS_CLIENT_ID }}
+          CS_CLIENT_SECRET: ${{ secrets.CS_CLIENT_SECRET }}
 
       - name: run conversion and push rule to CS
         run: |
@@ -52,6 +52,6 @@ jobs:
           do
             if echo ${changed_file} | grep -q "rules"
             then
-              python script.py "${changed_file}" "${auth_token}"
+              python script.py "${changed_file}"
             fi
           done
