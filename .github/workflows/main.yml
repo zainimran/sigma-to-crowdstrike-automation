@@ -35,22 +35,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
           pip install pyyaml
-          sudo apt-get install jq
           
       - id: get-new-files
         uses: jitterbit/get-changed-files@v1
 
-      - name: get CS auth token
+      - name: get CS auth tokens
         run: |
-          curl -X POST "https://api.us-2.crowdstrike.com/oauth2/token" -H  "accept: application/json" -H  "Content-Type: application/x-www-form-urlencoded" -d "client_id=${{ secrets.CS_CLIENT_ID }}&client_secret=${{ secrets.CS_CLIENT_SECRET }}" > cs_auth_token.json
+          python get_tokens.py  
+          curl -X POST "https://api.us-2.crowdstrike.com/oauth2/token" -H  "accept: application/json" -H  "Content-Type: application/x-www-form-urlencoded" -d "client_id=${{ secrets.CS_CLIENT_ID }}&client_secret=${{ secrets.CS_CLIENT_SECRET }}" > ebryx_cs_auth_token.json
+        env:
+          SECRETS: ${{ secrets }}
 
       - name: run conversion and push rule to CS
         run: |
-          auth_token=$(cat cs_auth_token.json | jq -r '.access_token')
           for changed_file in ${{ steps.get-new-files.outputs.added_modified }}
           do
             if echo ${changed_file} | grep -q "rules"
             then
-              python script.py ${changed_file} ${auth_token}
+              python script.py "${changed_file}" "${auth_token}"
             fi
           done

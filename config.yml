@@ -1,0 +1,12 @@
+Ebryx:
+  name: 'Ebryx'
+  cs_client_id: 'ebryx-cs-client-id'
+  cs_client_secret: 'ebryx-cs-client-secret'
+  cs_base_url: 'https://api.us-2.crowdstrike.com'
+  rule_creation_user: 'zain.imran@ebryx.com'
+  rulegroup_id: 'cd2f65a62b7241478ca9a2f9aded6c63'
+  cs_disposition_id: 10
+  cs_auth_token_file: 'ebryx_cs_auth_token.json'
+
+ABC:
+  cs_client_id: 'abc-cs-client-id'

@@ -88,25 +88,43 @@ if 'dns_request' in detection:
         "values": dns_values
     })
 
-payload = json.dumps({
-    "name": name,
-    "comment": description,
-    "description": description,
-    "pattern_severity": pattern_severity,
-    "rulegroup_id": "cd2f65a62b7241478ca9a2f9aded6c63",
-    "ruletype_id": ruletype_id,
-    "disposition_id": 10,
-    "field_values": field_values
-}, indent=4, sort_keys=True)
+with open('config.yml', 'r') as stream:
+    try:
+        data_loaded = yaml.safe_load(stream)
+        client_list = list(data_loaded.keys())
+        for client in client_list:
+            if data_loaded[client]['cs_base_url'] is None:
+                continue
+            cs_base_url = data_loaded[client]['cs_base_url']
+            rule_creation_user = data_loaded[client]['rule_creation_user']
+            rulegroup_id = data_loaded[client]['rulegroup_id']
+            cs_disposition_id = data_loaded[client]['cs_disposition_id']
+            cs_auth_token_file = data_loaded[client]['cs_auth_token_file']
 
-headers = {
-    'X-CS-USERNAME': 'zain.imran@ebryx.com',
-    'Authorization': 'Bearer {token}'.format(token=sys.argv[2]),
-    'Content-Type': 'application/json'
-}
+            url = "{base_url}/api/v1/rules".format(base_url=cs_base_url)
+            payload = json.dumps({
+                "name": name,
+                "comment": description,
+                "description": description,
+                "pattern_severity": pattern_severity,
+                "rulegroup_id": rulegroup_id,
+                "ruletype_id": ruletype_id,
+                "disposition_id": cs_disposition_id,
+                "field_values": field_values
+            }, indent=4, sort_keys=True)
 
-url = "https://api.us-2.crowdstrike.com/ioarules/entities/rules/v1"
+            # load a json file and read its content
+            with open(cs_auth_token_file, 'r') as data_file:
+                data = json.load(data_file)
+                auth_token = data['access_token']
 
-response = requests.request("POST", url, headers=headers, data=payload)
+            headers = {
+                'X-CS-USERNAME': rule_creation_user,
+                'Authorization': 'Bearer {token}'.format(token=auth_token),
+                'Content-Type': 'application/json'
+            }
+            response = requests.request("POST", url, headers=headers, data=payload)
 
-print(response.text)
+            print(response.text)
+    except yaml.YAMLError as exc:
+        print(exc)
