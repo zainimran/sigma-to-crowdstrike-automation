@@ -6,6 +6,3 @@ Ebryx:
   rulegroup_id: 'cd2f65a62b7241478ca9a2f9aded6c63'
   cs_disposition_id: 10
   cs_auth_token_file: 'ebryx_cs_auth_token.json'
-
-ABC:
-  description: 'abc'
