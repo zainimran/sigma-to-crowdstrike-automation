@@ -44,6 +44,7 @@ if exclude_ident is not None:
     elif 'Image|endswith' in detection[exclude_ident]:
         image_list = detection[exclude_ident]['Image|endswith']
         for image in image_list:
+            image = image.replace('.', '\.', 1)
             image = ".*{image}".format(image=image).replace('\\', '', 1)
             image_values.append({
                 "label": "exclude",
@@ -63,6 +64,7 @@ if 'dns_request' in detection:
     if 'QueryName' in detection['dns_request']:
         dns_list = detection['dns_request']['QueryName']
         for dns in dns_list:
+            dns = dns.replace('.', '\.')
             dns_values.append({
                 "label": "include",
                 "value": dns
@@ -70,6 +72,7 @@ if 'dns_request' in detection:
     elif 'QueryName|contains' in detection['dns_request']:
         dns_list = detection['dns_request']['QueryName|contains']
         for dns in dns_list:
+            dns = dns.replace('.', '\.')
             dns = ".*{detection}.*".format(
                 detection=detection['dns_request']['QueryName|contains'])
             dns_values.append({
