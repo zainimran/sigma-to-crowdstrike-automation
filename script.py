@@ -93,7 +93,7 @@ with open('config.yml', 'r') as stream:
         data_loaded = yaml.safe_load(stream)
         client_list = list(data_loaded.keys())
         for client in client_list:
-            if data_loaded[client]['cs_base_url'] is None:
+            if 'cs_base_url' not in data_loaded[client]:
                 continue
             cs_base_url = data_loaded[client]['cs_base_url']
             rule_creation_user = data_loaded[client]['rule_creation_user']

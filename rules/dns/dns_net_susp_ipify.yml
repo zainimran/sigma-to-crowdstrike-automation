@@ -45,3 +45,4 @@ detection:
             - \msedge.exe
             - \vivaldi.exe
     condition: dns_request and not browser_process
+    
