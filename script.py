@@ -113,6 +113,8 @@ with open('config.yml', 'r') as stream:
                 "field_values": field_values
             }, indent=4, sort_keys=True)
 
+            print(payload)
+
             # load a json file and read its content
             with open(cs_auth_token_file, 'r') as data_file:
                 data = json.load(data_file)
