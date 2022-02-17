@@ -99,8 +99,6 @@ payload = json.dumps({
     "field_values": field_values
 }, indent=4, sort_keys=True)
 
-print(payload)
-
 headers = {
     'X-CS-USERNAME': 'zain.imran@ebryx.com',
     'Authorization': 'Bearer {token}'.format(token=sys.argv[2]),
