@@ -44,7 +44,7 @@ jobs:
           python get_tokens.py  
           curl -X POST "https://api.us-2.crowdstrike.com/oauth2/token" -H  "accept: application/json" -H  "Content-Type: application/x-www-form-urlencoded" -d "client_id=${{ secrets.CS_CLIENT_ID }}&client_secret=${{ secrets.CS_CLIENT_SECRET }}" > ebryx_cs_auth_token.json
         env:
-          SECRETS: ${{ secrets }}
+          SECRETS: ${{ secrets.CS_CLIENT_ID }} ${{ secrets.CS_CLIENT_SECRET }}
 
       - name: run conversion and push rule to CS
         run: |
