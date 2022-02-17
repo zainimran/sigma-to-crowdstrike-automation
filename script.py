@@ -25,36 +25,38 @@ if product == 'windows':
 
 field_values = []
 
-search_ident = detection.get('filter') or detection.get('browser_process')
-if search_ident:
-    image_filter = ''
-    if 'Image|contains' in detection[search_ident]:
-        image_filter = ".*{detection}.*".format(
-            detection=detection[search_ident]['Image|contains'])
-        field_values.append({
-            "name": "ImageFilename",
-            "label": "Image Filename",
-            "type": "excludable",
-            "values": [{
+exclude_ident = None
+if 'filter' in detection:
+    exclude_ident = 'filter'
+elif 'browser_process' in detection:
+    exclude_ident = 'browser_process'
+
+if exclude_ident is not None:
+    image_values = []
+    if 'Image|contains' in detection[exclude_ident]:
+        image_list = detection[exclude_ident]['Image|contains']
+        for image in image_list:
+            image = ".*{image}.*".format(image=image)
+            image_values.append({
                 "label": "exclude",
-                "value": image_filter
-            }
-            ]
-        })
-    elif 'Image|endswith' in detection[search_ident]:
-        image_filter = ".*{detection}".format(
-            detection=detection[search_ident]['Image|endswith'].replace(
-                '\\', '', 1))
-        field_values.append({
-            "name": "ImageFilename",
-            "label": "Image Filename",
-            "type": "excludable",
-            "values": [{
+                "value": image
+            })
+    elif 'Image|endswith' in detection[exclude_ident]:
+        image_list = detection[exclude_ident]['Image|endswith']
+        for image in image_list:
+            image = ".*{image}".format(image=image).replace('\\', '', 1)
+            image_values.append({
                 "label": "exclude",
-                "value": image_filter
-            }
-            ]
-        })
+                "value": image
+            })
+    if len(image_values) == 0:
+        image_values = ''
+    field_values.append({
+        "name": "ImageFilename",
+        "label": "Image Filename",
+        "type": "excludable",
+        "values": image_values
+    })
 
 if 'dns_request' in detection:
     dns_values = []
@@ -93,6 +95,8 @@ payload = json.dumps({
     "disposition_id": 10,
     "field_values": field_values
 }, indent=4, sort_keys=True)
+
+print(payload)
 
 headers = {
     'X-CS-USERNAME': 'zain.imran@ebryx.com',
