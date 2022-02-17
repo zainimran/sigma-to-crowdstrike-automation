@@ -101,7 +101,7 @@ with open('config.yml', 'r') as stream:
             cs_disposition_id = data_loaded[client]['cs_disposition_id']
             cs_auth_token_file = data_loaded[client]['cs_auth_token_file']
 
-            url = "{base_url}/api/v1/rules".format(base_url=cs_base_url)
+            url = "{base_url}/ioarules/entities/rules/v1".format(base_url=cs_base_url)
             payload = json.dumps({
                 "name": name,
                 "comment": description,
